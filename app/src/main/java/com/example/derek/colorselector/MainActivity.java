@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    FragmentManager fm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +33,19 @@ public class MainActivity extends ActionBarActivity {
 //            firstFragment.setArguments(getIntent().getExtras());
 
             // Add the fragment to the 'fragment_container' FrameLayout
-            FragmentManager fm = getFragmentManager();
+            fm = getFragmentManager();
             fm.beginTransaction().add(R.id.fragment_container, firstFragment).commit();
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(fm.getBackStackEntryCount() != 0) {
+            fm.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
