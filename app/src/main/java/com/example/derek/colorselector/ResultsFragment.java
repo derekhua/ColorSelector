@@ -1,6 +1,7 @@
 package com.example.derek.colorselector;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
  * Created by Derek on 4/17/15.
  */
 public class ResultsFragment extends Fragment {
+
+    FragmentManager fm = getFragmentManager();
 
     private int mPositionHue;
     private int mPositionSat;
@@ -82,4 +85,13 @@ public class ResultsFragment extends Fragment {
 //            }
 //        });
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // retain this Fragment across configuration changes
+        setRetainInstance(true);
+    }
+
 }

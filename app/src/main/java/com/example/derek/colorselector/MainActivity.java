@@ -10,6 +10,14 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
     FragmentManager fm;
+    HueFragment firstFragment;
+
+    public final String HUE_FRAGMENT = "hueFragment";
+    public final String SAT_FRAGMENT = "saturationFragment";
+    public final String VAL_FRAGMENT = "valueFragment";
+    public final String RES_FRAGMENT = "resultsFragment";
+
+    public String currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,19 +33,24 @@ public class MainActivity extends ActionBarActivity {
                 return;
             }
 
-            // Create a new Fragment to be placed in the activity layout
-            HueFragment firstFragment = new HueFragment();
+            fm = getFragmentManager();
+            firstFragment = (HueFragment) fm.findFragmentByTag(HUE_FRAGMENT);
 
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
+            // if mFragment is non-null, then its currently being retain across configuration changes
+            if(firstFragment == null) {
+                // Create a new Fragment to be placed in the activity layout
+                firstFragment = new HueFragment();
+                // In case this activity was started with special instructions from an
+                // Intent, pass the Intent's extras to the fragment as arguments
 //            firstFragment.setArguments(getIntent().getExtras());
 
-            // Add the fragment to the 'fragment_container' FrameLayout
-            fm = getFragmentManager();
-            fm.beginTransaction().add(R.id.fragment_container, firstFragment).commit();
+                // Add the fragment to the 'fragment_container' FrameLayout
+                fm.beginTransaction().replace(R.id.fragment_container, firstFragment, HUE_FRAGMENT).addToBackStack(null).commit();
+            }
         }
     }
 
+    // handle the back button press
     @Override
     public void onBackPressed() {
         if(fm.getBackStackEntryCount() != 0) {
@@ -68,4 +81,28 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        SharedPreferences prefs = this.getSharedPreferences("com.example.derek.colorselector", Context.MODE_PRIVATE);
+//
+//        // keep track of current frag
+//        String CURRENT_FRAG = null;
+//
+//        HueFragment myFragment1 = (HueFragment)getFragmentManager().findFragmentByTag(HUE_FRAGMENT);
+//        SaturationFragment myFragment2 = (SaturationFragment)getFragmentManager().findFragmentByTag(SAT_FRAGMENT);
+//        ValueFragment myFragment3 = (ValueFragment)getFragmentManager().findFragmentByTag(VAL_FRAGMENT);
+//        ResultsFragment myFragment4 = (ResultsFragment)getFragmentManager().findFragmentByTag(RES_FRAGMENT);
+//
+//        if (myFragment1.isVisible()) {
+//            prefs.edit().putString(CURRENT_FRAG, HUE_FRAGMENT).apply();
+//        } else if (myFragment2.isVisible()) {
+//            prefs.edit().putString(CURRENT_FRAG, SAT_FRAGMENT).apply();
+//        } else if (myFragment3.isVisible()) {
+//            prefs.edit().putString(CURRENT_FRAG, VAL_FRAGMENT).apply();
+//        } else if (myFragment4.isVisible()) {
+//            prefs.edit().putString(CURRENT_FRAG, RES_FRAGMENT).apply();
+//        }
+//    }
 }

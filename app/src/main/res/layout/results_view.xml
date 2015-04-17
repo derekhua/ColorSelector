@@ -15,6 +15,7 @@
         android:layout_gravity="center_horizontal"
 
         android:layout_weight="1"
+        android:textColor="#FFFFFF"
         />
 
     <TextView
@@ -24,7 +25,9 @@
         android:text="Large Text"
         android:id="@+id/sat_text"
         android:layout_gravity="center_horizontal"
+
         android:layout_weight="1"
+        android:textColor="#FFFFFF"
         />
 
     <TextView
@@ -34,6 +37,8 @@
         android:text="Large Text"
         android:id="@+id/val_text"
         android:layout_gravity="center_horizontal"
+
         android:layout_weight="1"
+        android:textColor="#FFFFFF"
         />
 </LinearLayout>

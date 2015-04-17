@@ -1,6 +1,7 @@
 package com.example.derek.colorselector;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,10 @@ import java.util.ArrayList;
  */
 // contains the color swatches
 public class HueFragment extends Fragment {
+
+    FragmentManager fm = getFragmentManager();
+
+    public final String SAT_FRAGMENT = "saturationFragment";
 
     // holds the color pairs
     private ArrayList<Integer[]> mColorList = null;
@@ -57,7 +62,7 @@ public class HueFragment extends Fragment {
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack so the user can navigate back
-                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment, SAT_FRAGMENT);
                 transaction.addToBackStack("hueFragment");
 
                 // Commit the transaction
@@ -65,4 +70,13 @@ public class HueFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // retain this Fragment across configuration changes
+        setRetainInstance(true);
+    }
+
 }

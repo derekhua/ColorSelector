@@ -1,6 +1,7 @@
 package com.example.derek.colorselector;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,10 @@ import java.util.ArrayList;
  * Created by Derek on 4/16/15.
  */
 public class SaturationFragment extends Fragment {
+
+    FragmentManager fm = getFragmentManager();
+
+    public final String VAL_FRAGMENT = "valueFragment";
 
     private ArrayList<Integer[]> mColorList = null;
 
@@ -70,12 +75,20 @@ public class SaturationFragment extends Fragment {
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack so the user can navigate back
-                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment, VAL_FRAGMENT);
                 transaction.addToBackStack("saturationFragment");
 
                 // Commit the transaction
                 transaction.commit();
             }
         });
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // retain this Fragment across configuration changes
+        setRetainInstance(true);
     }
 }
