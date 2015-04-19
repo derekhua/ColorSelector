@@ -1,4 +1,4 @@
-package com.example.derek.colorselector.NamedColors;
+package com.example.derek.colorselector.namedcolors;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -20,7 +20,7 @@ public class ColorCursorAdapter extends CursorAdapter {
     // Fields from the database (projection)
     // Must include the _id column for the adapter to work
     static private final int ID = 0;
-    static private final int NAME = 1;
+    static private final int NAME =1;
     static private final int HUE = 2;
     static private final int SATURATION= 3;
     static private final int VALUE = 4;
@@ -28,7 +28,9 @@ public class ColorCursorAdapter extends CursorAdapter {
     private LayoutInflater mInflater;
 
     static public final String[] PROJECTION
-            = new String[] { ColorTable.COLUMN_ID,
+            = new String[] {
+            ColorTable.COLUMN_ID,
+            ColorTable.COLUMN_NAME,
             ColorTable.COLUMN_HUE,
             ColorTable.COLUMN_SATURATION,
             ColorTable.COLUMN_VALUE
@@ -37,7 +39,8 @@ public class ColorCursorAdapter extends CursorAdapter {
     static public final String ORDER_BY
             = ColorTable.COLUMN_NAME + "," +
             ColorTable.COLUMN_HUE + "," +
-            ColorTable.COLUMN_SATURATION;
+            ColorTable.COLUMN_SATURATION + "," +
+            ColorTable.COLUMN_VALUE;
 
 
     public ColorCursorAdapter(Context context, Cursor cursor, int flag) {
@@ -56,14 +59,11 @@ public class ColorCursorAdapter extends CursorAdapter {
         TextView value;
     }
 
-
-
 //    public ColorCursorAdapter( Context context, Cursor cursor, int flags ) {
 //        super(context, cursor, flags);
 //
 //        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //    }
-
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -88,23 +88,12 @@ public class ColorCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        ViewHolder viewHolder = updateViewHolderValues(view, cursor);
-        decorateView( viewHolder, cursor );
-    }
-
-    private ViewHolder updateViewHolderValues(View view, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-
         viewHolder.name.setText(cursor.getString(NAME));
         viewHolder.hue.setText(Float.toString(cursor.getFloat(HUE)));
         viewHolder.saturation.setText(Float.toString(cursor.getFloat(SATURATION)));
         viewHolder.value.setText(Float.toString(cursor.getFloat(VALUE)));
-
-        return viewHolder;
-    }
-
-    private void decorateView( ViewHolder color, Cursor cursor ) {
-        color.preview.setBackgroundColor(Color.HSVToColor(new float[] {
+        viewHolder.preview.setBackgroundColor(Color.HSVToColor(new float[] {
                 cursor.getFloat(HUE), cursor.getFloat(SATURATION), cursor.getFloat(VALUE)
         }));
     }

@@ -1,4 +1,4 @@
-package com.example.derek.colorselector.NamedColors;
+package com.example.derek.colorselector.namedcolors;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -13,8 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.derek.colorselector.ContentProvider.ColorContentProvider;
 import com.example.derek.colorselector.R;
+import com.example.derek.colorselector.contentprovider.ColorContentProvider;
+import com.example.derek.colorselector.db.ColorTable;
 
 /**
  * Created by Derek on 4/18/15.
@@ -23,7 +24,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 
     private ColorCursorAdapter mAdapter;
 
-    Cursor mCursor;
+    Cursor mCursor = null;
 
     FragmentManager fm = getFragmentManager();
 
@@ -53,10 +54,10 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         super.onStart();
 
         mListView = (ListView) getActivity().findViewById(R.id.namedcolors_list);
+
         fillData();
 
         mListView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
-
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
 //
@@ -73,17 +74,19 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
     // populate the list with task data from the db
     private void fillData() {
         getLoaderManager().initLoader(0, null, this);
-//        mAdapter = new ColorCursorAdapter( getActivity(), // context
-//                null, // cursor
-//                0     // flags
-//        );
 
-        mAdapter = new ColorCursorAdapter( getActivity(), // context
-                mCursor, // cursor
-                0       // flags
-        );
+//            if (mCursor != null) {
+                mAdapter = new ColorCursorAdapter(getActivity(), // context
+                        null, // cursor
+                        0       // flags
+                );
+                mListView.setAdapter(mAdapter);
+//            }
+//            else {
+//                Toast.makeText(getActivity(), "no cursor!", Toast.LENGTH_SHORT).show();
+//            }
 
-        mListView.setAdapter(mAdapter);
+
     }
 
     @Override
@@ -105,20 +108,22 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                 = new CursorLoader( getActivity(),
                 ColorContentProvider.CONTENT_URI,
                 ColorCursorAdapter.PROJECTION,
-                "hue >=? AND hue <=? AND SATURATION =? AND value =?",
-                new String[] {Float.toString(mLeftHue), Float.toString(mRightHue), Float.toString(mSaturation), Float.toString(mValue)},
-                ColorCursorAdapter.ORDER_BY );
+//                "hue >=? AND hue <=? AND SATURATION =? AND value =?",
+                null,
+//                new String[] {Float.toString(mLeftHue), Float.toString(mRightHue), Float.toString(mSaturation), Float.toString(mValue)},
+                null,
+                ColorTable.COLUMN_NAME);
 
         return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursor = data;
+//        mCursor = data;
+          mAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }

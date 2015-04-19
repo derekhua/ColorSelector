@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.derek.colorselector.ColorSwatches.HueFragment;
+import com.example.derek.colorselector.colorswatches.HueFragment;
 
 
 public class MainActivity extends ActionBarActivity {

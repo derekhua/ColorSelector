@@ -1,4 +1,4 @@
-package com.example.derek.colorselector.ColorSwatches;
+package com.example.derek.colorselector.colorswatches;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.derek.colorselector.NamedColors.NamedColorsFragment;
+import com.example.derek.colorselector.namedcolors.NamedColorsFragment;
 import com.example.derek.colorselector.R;
 
 /**

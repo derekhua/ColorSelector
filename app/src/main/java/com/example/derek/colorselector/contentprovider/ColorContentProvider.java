@@ -1,4 +1,4 @@
-package com.example.derek.colorselector.ContentProvider;
+package com.example.derek.colorselector.contentprovider;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -71,7 +71,7 @@ public class ColorContentProvider extends ContentProvider {
                 break;
             case TASK_ID:
                 // add the task ID to the original query
-                queryBuilder.appendWhere( ColorTable.COLUMN_ID + "=" + uri.getLastPathSegment() );
+                queryBuilder.appendWhere( ColorTable.COLUMN_NAME + "=" + uri.getLastPathSegment() );
                 break;
             default:
                 throw new IllegalArgumentException("Invalid URI: " + uri);

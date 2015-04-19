@@ -1,4 +1,4 @@
-package com.example.derek.colorselector.ColorSwatches;
+package com.example.derek.colorselector.colorswatches;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
