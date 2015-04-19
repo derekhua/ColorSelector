@@ -59,22 +59,8 @@ public class MainActivity extends ActionBarActivity {
         if(fm.getBackStackEntryCount() != 1) {
             fm.popBackStack();
         } else {
-            Toast.makeText(this, "fuck you", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Bye!", Toast.LENGTH_SHORT).show();
             super.onBackPressed();
-//            fm = getFragmentManager();
-//            firstFragment = (HueFragment) fm.findFragmentByTag(HUE_FRAGMENT);
-//
-//            // if mFragment is non-null, then its currently being retain across configuration changes
-//            if(firstFragment == null) {
-//                // Create a new Fragment to be placed in the activity layout
-//                firstFragment = new HueFragment();
-//                // In case this activity was started with special instructions from an
-//                // Intent, pass the Intent's extras to the fragment as arguments
-////            firstFragment.setArguments(getIntent().getExtras());
-//
-//                // Add the fragment to the 'fragment_container' FrameLayout
-//                fm.beginTransaction().add(R.id.fragment_container, firstFragment, HUE_FRAGMENT).addToBackStack(null).commit();
-//            }
         }
     }
 
@@ -99,28 +85,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        SharedPreferences prefs = this.getSharedPreferences("com.example.derek.colorselector", Context.MODE_PRIVATE);
-//
-//        // keep track of current frag
-//        String CURRENT_FRAG = null;
-//
-//        HueFragment myFragment1 = (HueFragment)getFragmentManager().findFragmentByTag(HUE_FRAGMENT);
-//        SaturationFragment myFragment2 = (SaturationFragment)getFragmentManager().findFragmentByTag(SAT_FRAGMENT);
-//        ValueFragment myFragment3 = (ValueFragment)getFragmentManager().findFragmentByTag(VAL_FRAGMENT);
-//        ResultsFragment myFragment4 = (ResultsFragment)getFragmentManager().findFragmentByTag(RES_FRAGMENT);
-//
-//        if (myFragment1.isVisible()) {
-//            prefs.edit().putString(CURRENT_FRAG, HUE_FRAGMENT).apply();
-//        } else if (myFragment2.isVisible()) {
-//            prefs.edit().putString(CURRENT_FRAG, SAT_FRAGMENT).apply();
-//        } else if (myFragment3.isVisible()) {
-//            prefs.edit().putString(CURRENT_FRAG, VAL_FRAGMENT).apply();
-//        } else if (myFragment4.isVisible()) {
-//            prefs.edit().putString(CURRENT_FRAG, RES_FRAGMENT).apply();
-//        }
-//    }
 }

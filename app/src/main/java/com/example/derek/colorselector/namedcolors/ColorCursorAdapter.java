@@ -45,7 +45,6 @@ public class ColorCursorAdapter extends CursorAdapter {
 
     public ColorCursorAdapter(Context context, Cursor cursor, int flag) {
         super(context, cursor, flag);
-
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -59,12 +58,7 @@ public class ColorCursorAdapter extends CursorAdapter {
         TextView value;
     }
 
-//    public ColorCursorAdapter( Context context, Cursor cursor, int flags ) {
-//        super(context, cursor, flags);
-//
-//        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//    }
-
+    // get views
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
@@ -85,6 +79,7 @@ public class ColorCursorAdapter extends CursorAdapter {
         return row;
     }
 
+    // set views
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 

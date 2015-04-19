@@ -39,7 +39,7 @@ public class HueFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // get the hsv array
-        mColorList = ColorCreator.getColorListHue(345, 1, 1, 30, 11);
+        mColorList = ColorCreator.getColorListHue(345, 1, 1, 30, 12);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
 
         // get the list view and set the adapter

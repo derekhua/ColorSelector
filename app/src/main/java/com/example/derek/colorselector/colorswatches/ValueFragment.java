@@ -55,7 +55,7 @@ public class ValueFragment extends Fragment{
         sat -= (0.1f * mPositionSat);
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListValue(hue, sat, 1, -0.1f, 10);
+        mColorList = ColorCreator.getColorListValue(hue, sat, 1, -0.1f, 11);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
 
         // get the list view and set the adapter

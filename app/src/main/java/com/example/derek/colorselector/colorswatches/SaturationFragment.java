@@ -49,7 +49,7 @@ public class SaturationFragment extends Fragment {
         hue %= 360;
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListSaturation(hue, 1, 1, -0.1f, 10);
+        mColorList = ColorCreator.getColorListSaturation(hue, 1, 1, -0.1f, 11);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
 
         // get the list view and set the adapter

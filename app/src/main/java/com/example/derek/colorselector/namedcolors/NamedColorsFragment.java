@@ -35,15 +35,28 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
     private float mSaturation;
     private float mValue;
 
+    private float mLeftSaturation;
+    private float mRightValue;
+    private float mRightSaturation;
+    private float mLeftValue;
     ListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        mLeftHue = bundle.getFloat("lefthue");
+        mLeftHue = bundle.getFloat("leftHue");
         mRightHue = bundle.getFloat("rightHue");
         mSaturation = bundle.getFloat("saturation");
         mValue = bundle.getFloat("value");
+
+        mSaturation /= 100f;
+        mValue /= 100f;
+
+        float delta = 0.05f;
+        mLeftSaturation = mSaturation - delta;
+        mRightSaturation = mSaturation + delta;
+        mLeftValue = mValue - delta;
+        mRightValue = mValue + delta;
 
         // use this layout
         return inflater.inflate(R.layout.namedcolors_view, container, false);
@@ -108,10 +121,14 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                 = new CursorLoader( getActivity(),
                 ColorContentProvider.CONTENT_URI,
                 ColorCursorAdapter.PROJECTION,
-//                "hue >=? AND hue <=? AND SATURATION =? AND value =?",
-                null,
-//                new String[] {Float.toString(mLeftHue), Float.toString(mRightHue), Float.toString(mSaturation), Float.toString(mValue)},
-                null,
+                "(" + ColorTable.COLUMN_HUE + " >=? AND " + ColorTable.COLUMN_HUE + " <=?) AND " +
+                "(" + ColorTable.COLUMN_SATURATION + " >=? AND " + ColorTable.COLUMN_SATURATION + " <=?) AND " +
+                "(" + ColorTable.COLUMN_VALUE + " >=? AND " + ColorTable.COLUMN_VALUE + " <=?)",
+
+                new String[] {Float.toString(mLeftHue), Float.toString(mRightHue),
+                        Float.toString(mLeftSaturation), Float.toString(mRightSaturation),
+                        Float.toString(mLeftValue), Float.toString(mRightValue)},
+
                 ColorTable.COLUMN_NAME);
 
         return cursorLoader;
