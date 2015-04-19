@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.example.derek.colorselector.ColorSwatches.HueFragment;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -45,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 //            firstFragment.setArguments(getIntent().getExtras());
 
                 // Add the fragment to the 'fragment_container' FrameLayout
-                fm.beginTransaction().replace(R.id.fragment_container, firstFragment, HUE_FRAGMENT).addToBackStack(null).commit();
+                fm.beginTransaction().add(R.id.fragment_container, firstFragment, HUE_FRAGMENT).addToBackStack(null).commit();
             }
         }
     }
@@ -53,10 +56,25 @@ public class MainActivity extends ActionBarActivity {
     // handle the back button press
     @Override
     public void onBackPressed() {
-        if(fm.getBackStackEntryCount() != 0) {
+        if(fm.getBackStackEntryCount() != 1) {
             fm.popBackStack();
         } else {
+            Toast.makeText(this, "fuck you", Toast.LENGTH_SHORT).show();
             super.onBackPressed();
+//            fm = getFragmentManager();
+//            firstFragment = (HueFragment) fm.findFragmentByTag(HUE_FRAGMENT);
+//
+//            // if mFragment is non-null, then its currently being retain across configuration changes
+//            if(firstFragment == null) {
+//                // Create a new Fragment to be placed in the activity layout
+//                firstFragment = new HueFragment();
+//                // In case this activity was started with special instructions from an
+//                // Intent, pass the Intent's extras to the fragment as arguments
+////            firstFragment.setArguments(getIntent().getExtras());
+//
+//                // Add the fragment to the 'fragment_container' FrameLayout
+//                fm.beginTransaction().add(R.id.fragment_container, firstFragment, HUE_FRAGMENT).addToBackStack(null).commit();
+//            }
         }
     }
 

@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
 
     android:layout_marginTop="30dp"
+    android:layout_marginBottom="30dp"
     >
 
     <TextView
@@ -41,4 +42,13 @@
         android:layout_weight="1"
         android:textColor="#FFFFFF"
         />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Next"
+        android:id="@+id/next_button"
+        android:layout_gravity="center_horizontal"
+        android:longClickable="false"
+        android:nestedScrollingEnabled="false" />
 </LinearLayout>

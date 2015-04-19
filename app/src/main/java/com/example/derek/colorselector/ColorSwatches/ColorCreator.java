@@ -1,4 +1,4 @@
-package com.example.derek.colorselector;
+package com.example.derek.colorselector.ColorSwatches;
 
 import android.graphics.Color;
 
