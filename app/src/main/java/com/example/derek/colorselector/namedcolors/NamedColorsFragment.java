@@ -31,8 +31,6 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 
     private float mLeftHue;
     private float mRightHue;
-    private float mSaturation;
-    private float mValue;
 
     private float mLeftSaturation;
     private float mRightValue;
@@ -41,8 +39,19 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 
     ListView mListView;
 
-    private String ORDER_BY_PREF = "orderbypref";
-    private String ORDER_BY = null;
+    private float mSaturation;
+    private float mSaturationDelta;
+    private float mValue;
+    private float mValueDelta;
+
+    // sort order
+    private String[] SORT_ORDERS = {
+            "Hue, Saturation, Value", "Hue, Value, Saturation",
+            "Saturation, Hue, Value", "Saturation, Value, Hue",
+            "Value, Hue, Saturation", "Value, Saturation, Hue",
+            "Name"};
+    private String SORT_ORDER_NUM = "sortordernum";
+    private int sortOrderNum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,18 +59,19 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         mLeftHue = bundle.getFloat("leftHue");
         mRightHue = bundle.getFloat("rightHue");
         mSaturation = bundle.getFloat("saturation");
+        mSaturationDelta = bundle.getFloat("saturationdelta");
         mValue = bundle.getFloat("value");
+        mValueDelta = bundle.getFloat("valuedelta");
 
-        // to match database
-        mSaturation /= 100f;
-        mValue /= 100f;
+//        // to match database
+//        mSaturation /= 100f;
+//        mValue /= 100f;
 
         // create the range
-        float delta = 0.05f;
-        mLeftSaturation = mSaturation - delta;
-        mRightSaturation = mSaturation + delta;
-        mLeftValue = mValue - delta;
-        mRightValue = mValue + delta;
+        mLeftSaturation = mSaturation - mSaturationDelta;
+        mRightSaturation = mSaturation + mSaturationDelta;
+        mLeftValue = mValue - mValueDelta;
+        mRightValue = mValue + mValueDelta;
 
         // use this layout
         return inflater.inflate(R.layout.namedcolors_view, container, false);
@@ -72,7 +82,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         super.onStart();
 
         // using previous count by getPreference
-        ORDER_BY = getActivity().getPreferences(Context.MODE_PRIVATE).getString(ORDER_BY_PREF, null);
+        sortOrderNum = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(SORT_ORDER_NUM, 0);
 
         Button button = (Button) getActivity().findViewById(R.id.sorting_order_button);
 
@@ -84,34 +94,28 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] order = {
-                                  "Hue, Saturation, Value", "Hue, Value, Saturation",
-                                  "Saturation, Hue, Value", "Saturation, Value, Hue",
-                                  "Value, Hue, Saturation", "Value, Saturation, Hue",
-                                  "Name"};
-
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Configure Sorting Order")
-                        .setSingleChoiceItems(order, -1,
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setTitle("Configure Sorting Order");
+                alertDialog.setTitle("Sort by: ");
+                alertDialog.setSingleChoiceItems(SORT_ORDERS, sortOrderNum,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                    ORDER_BY = order[which];
-                                    ORDER_BY = ORDER_BY.toLowerCase();
-                                    Toast.makeText(getActivity(), "Sort: " + ORDER_BY, Toast.LENGTH_SHORT).show();
+                                    sortOrderNum = which;
+                                    Toast.makeText(getActivity(), "Sort by: " + SORT_ORDERS[which], Toast.LENGTH_SHORT).show();
                                     updateAfterSort();
                             }
-                        })
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        });
+                alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                             }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        //.setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                        });
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+                alertDialog.show();
             }
         });
 
@@ -146,6 +150,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         mListView.setAdapter(mAdapter);
     }
 
+    // restarts the loader
     private void updateAfterSort() {
         getLoaderManager().restartLoader(0, null, this);
     }
@@ -182,7 +187,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                             Float.toString(mLeftSaturation), Float.toString(mRightSaturation),
                             Float.toString(mLeftValue), Float.toString(mRightValue)},
                     // order-by
-                    ORDER_BY);
+                    SORT_ORDERS[sortOrderNum]);
         } else {
             cursorLoader
                     = new CursorLoader(getActivity(),
@@ -197,7 +202,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                             Float.toString(mLeftSaturation), Float.toString(mRightSaturation),
                             Float.toString(mLeftValue), Float.toString(mRightValue)},
                     // order-by
-                    ORDER_BY);
+                    SORT_ORDERS[sortOrderNum]);
         }
         return cursorLoader;
     }
@@ -216,8 +221,8 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
     public void onPause() {
         super.onPause();
         SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-        // storing mCurrentCount
-        editor.putString(ORDER_BY_PREF, ORDER_BY);
-        editor.commit();
+        // storing order preference
+        editor.putInt(SORT_ORDER_NUM, sortOrderNum);
+        editor.apply();
     }
 }

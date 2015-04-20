@@ -1,7 +1,6 @@
 package com.example.derek.colorselector.colorswatches;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,8 +18,6 @@ import java.util.ArrayList;
  */
 // contains the color swatches
 public class HueFragment extends Fragment {
-
-    FragmentManager fm = getFragmentManager();
 
     public final String SAT_FRAGMENT = "saturationFragment";
 
@@ -57,7 +54,11 @@ public class HueFragment extends Fragment {
                 // use this to send info
                 Bundle args = new Bundle();
 
-                args.putInt("position", position);
+                float hue = 345;
+                hue += (30 * position);
+                hue %= 360;
+
+                args.putFloat("hue", hue);
                 newFragment.setArguments(args);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

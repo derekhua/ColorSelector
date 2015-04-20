@@ -1,14 +1,22 @@
 package com.example.derek.colorselector.colorswatches;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.derek.colorselector.R;
 
@@ -19,20 +27,24 @@ import java.util.ArrayList;
  */
 public class SaturationFragment extends Fragment {
 
-    FragmentManager fm = getFragmentManager();
-
     public final String VAL_FRAGMENT = "valueFragment";
 
     private ArrayList<Integer[]> mColorList = null;
 
     private ColorAdapter mAdapter = null;
 
-    private int mPosition;
+    ListView mListView;
+
+    private float mHue;
+
+    private Integer SAT_SWATCH_NUMBER;
+    private String SAT_SWATCH_NUMBER_PREF = "swatchnumberpref";
+    private TextView mSatSeekbarNumberText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        mPosition = bundle.getInt("position");
+        mHue = bundle.getFloat("hue");
         // use this layout
         return inflater.inflate(R.layout.saturation_view, container, false);
     }
@@ -41,23 +53,29 @@ public class SaturationFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        SAT_SWATCH_NUMBER = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(SAT_SWATCH_NUMBER_PREF, 11);
+
+        Button button = (Button) getActivity().findViewById(R.id.sat_swatch_number_button);
         // position 0: 345° to 15°
         // position 1: 15° to 45° ...
+//
+//        float hue = 345;
+//        hue += (30 * mPosition);
+//        hue %= 360;
 
-        float hue = 345;
-        hue += (30 * mPosition);
-        hue %= 360;
+        // 100 / (SAT_SWATCH_NUMBER-1) = delta
+        float delta = 1.0f / (float)(SAT_SWATCH_NUMBER - 1);
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListSaturation(hue, 1, 1, -0.1f, 11);
+        mColorList = ColorCreator.getColorListSaturation(mHue, 1, 1, delta, SAT_SWATCH_NUMBER);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
 
         // get the list view and set the adapter
-        final ListView listView = (ListView) getActivity().findViewById(R.id.saturation_list);
-        listView.setAdapter(mAdapter);
+        mListView = (ListView) getActivity().findViewById(R.id.saturation_list);
+        mListView.setAdapter(mAdapter);
 
         // create the button listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
 
@@ -66,9 +84,14 @@ public class SaturationFragment extends Fragment {
 
                 // use this to send info
                 Bundle args = new Bundle();
+                args.putFloat("hue", mHue);
 
-                args.putInt("hueposition", mPosition);
-                args.putInt("saturationposition", position);
+                float saturation = 1f;
+                float delta = 1.0f / (float)(SAT_SWATCH_NUMBER - 1);
+                saturation -= (delta * position);
+
+                args.putFloat("saturation", saturation);
+                args.putFloat("saturationdelta", delta);
                 newFragment.setArguments(args);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -82,13 +105,92 @@ public class SaturationFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+        // shows the AlertDialog
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Configure Color Swatches");
+                alert.setMessage("Set number of swatches");
+
+                LinearLayout linearLayout = new LinearLayout(getActivity());
+
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                mSatSeekbarNumberText = new TextView(getActivity());
+                mSatSeekbarNumberText.setText(SAT_SWATCH_NUMBER.toString());
+                mSatSeekbarNumberText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                mSatSeekbarNumberText.setPadding(10, 10, 10, 10);
+
+                SeekBar seekBar = new SeekBar(getActivity());
+                seekBar.setMax(256);
+                seekBar.setProgress(SAT_SWATCH_NUMBER);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        mSatSeekbarNumberText.setText(Integer.toString(seekBar.getProgress()));
+                    }
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+                    // dynamically show the number
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        SAT_SWATCH_NUMBER = seekBar.getProgress();
+                    }
+                });
+                // add to layout
+                linearLayout.addView(seekBar);
+                linearLayout.addView(mSatSeekbarNumberText);
+                // set the layout
+                alert.setView(linearLayout);
+
+                alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getActivity(), "Swatch Number: " + SAT_SWATCH_NUMBER, Toast.LENGTH_SHORT).show();
+                        updateAfterAlert();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+                alert.show();
+            }
+        });
+    }
+
+    // update after alert dialog
+    private void updateAfterAlert() {
+        float delta = 1.0f / (float)(SAT_SWATCH_NUMBER-1);
+//        float hue = 345;
+//        hue += (30 * mPosition);
+//        hue %= 360;
+
+        // get the hsv array
+        mColorList = ColorCreator.getColorListSaturation(mHue, 1, 1, delta, SAT_SWATCH_NUMBER);
+        mAdapter = new ColorAdapter(getActivity(), mColorList);
+        mListView.setAdapter(mAdapter);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // retain this Fragment across configuration changes
         setRetainInstance(true);
+    }
+
+    // using this to saved preferences
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+        // storing order preference
+        editor.putInt(SAT_SWATCH_NUMBER_PREF, SAT_SWATCH_NUMBER);
+        // immediately
+        editor.commit();
     }
 }

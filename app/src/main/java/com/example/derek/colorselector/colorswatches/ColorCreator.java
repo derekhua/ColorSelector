@@ -33,7 +33,7 @@ public class ColorCreator {
             int colorLeft = Color.HSVToColor(new float[] {h, s, v});
             int colorRight = Color.HSVToColor(new float[] {(h+30)%360, s, v});
 
-            s += satChange;
+            s -= satChange;
             list.add(new Integer[] {colorLeft, colorRight});
         }
         return list;
@@ -48,7 +48,7 @@ public class ColorCreator {
             int colorLeft = Color.HSVToColor(new float[] {h, s, v});
             int colorRight = Color.HSVToColor(new float[] {(h+30)%360, s, v});
 
-            v += valChange;
+            v -= valChange;
             list.add(new Integer[] {colorLeft, colorRight});
         }
         return list;

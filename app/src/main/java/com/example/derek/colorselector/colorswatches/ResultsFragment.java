@@ -1,7 +1,6 @@
 package com.example.derek.colorselector.colorswatches;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,35 +9,35 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.derek.colorselector.namedcolors.NamedColorsFragment;
 import com.example.derek.colorselector.R;
+import com.example.derek.colorselector.namedcolors.NamedColorsFragment;
 
 /**
  * Created by Derek on 4/17/15.
  */
 public class ResultsFragment extends Fragment {
 
-    FragmentManager fm = getFragmentManager();
-
-    private int mPositionHue;
-    private int mPositionSat;
-    private int mPositionVal;
-
     private TextView hueResult;
     private TextView satResult;
     private TextView valResult;
 
-    private float leftHue;
     private float rightHue;
-    private float saturation;
-    private float value;
+
+    private float mHue;
+    private float mSaturation;
+    private float mSaturationDelta;
+    private float mValue;
+    private float mValueDelta;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        mPositionHue = bundle.getInt("hueposition");
-        mPositionSat = bundle.getInt("saturationposition");
-        mPositionVal = bundle.getInt("valueposition");
+        mHue = bundle.getFloat("hue");
+        mSaturation = bundle.getFloat("saturation");
+        mSaturationDelta = bundle.getFloat("saturationdelta");
+        mValue = bundle.getFloat("value");
+        mValueDelta = bundle.getFloat("valuedelta");
+
         // use this layout
         return inflater.inflate(R.layout.results_view, container, false);
     }
@@ -54,17 +53,14 @@ public class ResultsFragment extends Fragment {
         satResult = (TextView) getActivity().findViewById(R.id.sat_text);
         valResult = (TextView) getActivity().findViewById(R.id.val_text);
 
-        // calculate values to put in the views
-        leftHue = 345 + (mPositionHue * 30);
-        leftHue %= 360;
-        rightHue = leftHue + 30;
-        rightHue %= 360;
+        rightHue = (mHue + 30)%360;
 
-        saturation = 100 - (mPositionSat * 10);
-        value = 100 - (mPositionVal * 10);
+        // in percent format
+        float saturation = mSaturation * 100f;
+        float value = mValue * 100f;
 
         // set the views
-        hueResult.setText("The hue ranges from " + leftHue + "° to " + rightHue + "°.");
+        hueResult.setText("The hue ranges from " + mHue + "° to " + rightHue + "°.");
         satResult.setText("The saturation is at " + saturation + "%.");
         valResult.setText("The value is at " + value + "%.");
 
@@ -77,10 +73,12 @@ public class ResultsFragment extends Fragment {
                 // use this to send info
                 Bundle args = new Bundle();
 
-                args.putFloat("leftHue", leftHue);
+                args.putFloat("leftHue", mHue);
                 args.putFloat("rightHue", rightHue);
-                args.putFloat("saturation", saturation);
-                args.putFloat("value", value);
+                args.putFloat("saturation", mSaturation);
+                args.putFloat("saturationdelta", mSaturationDelta);
+                args.putFloat("value", mValue);
+                args.putFloat("valuedelta", mValueDelta);
                 newFragment.setArguments(args);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -103,5 +101,4 @@ public class ResultsFragment extends Fragment {
         // retain this Fragment across configuration changes
         setRetainInstance(true);
     }
-
 }

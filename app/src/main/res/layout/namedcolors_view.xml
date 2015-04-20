@@ -6,7 +6,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Configure Sorting"
+        android:text="Configure Sorting Order"
         android:id="@+id/sorting_order_button"
         android:layout_gravity="center_horizontal"
         android:nestedScrollingEnabled="false" />
