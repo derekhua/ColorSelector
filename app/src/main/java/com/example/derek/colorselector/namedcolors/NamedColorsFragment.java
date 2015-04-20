@@ -68,10 +68,10 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 //        mValue /= 100f;
 
         // create the range
-        mLeftSaturation = mSaturation - mSaturationDelta;
-        mRightSaturation = mSaturation + mSaturationDelta;
-        mLeftValue = mValue - mValueDelta;
-        mRightValue = mValue + mValueDelta;
+        mLeftSaturation = mSaturation - mSaturationDelta/2f;
+        mRightSaturation = mSaturation + mSaturationDelta/2f;
+        mLeftValue = mValue - mValueDelta/2f;
+        mRightValue = mValue + mValueDelta/2f;
 
         // use this layout
         return inflater.inflate(R.layout.namedcolors_view, container, false);
@@ -95,7 +95,6 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                alertDialog.setTitle("Configure Sorting Order");
                 alertDialog.setTitle("Sort by: ");
                 alertDialog.setSingleChoiceItems(SORT_ORDERS, sortOrderNum,
                         new DialogInterface.OnClickListener() {

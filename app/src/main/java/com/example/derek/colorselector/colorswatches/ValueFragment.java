@@ -113,8 +113,7 @@ public class ValueFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Configure Color Swatches");
-                alert.setMessage("Set number of swatches");
+                alert.setTitle("Set number of swatches");
 
                 LinearLayout linearLayout = new LinearLayout(getActivity());
 
