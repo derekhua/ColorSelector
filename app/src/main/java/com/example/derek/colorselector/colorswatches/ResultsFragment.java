@@ -48,6 +48,7 @@ public class ResultsFragment extends Fragment {
         super.onStart();
 
         Button button = (Button) getActivity().findViewById(R.id.next_button);
+
         // get the views
         hueResult = (TextView) getActivity().findViewById(R.id.hue_text);
         satResult = (TextView) getActivity().findViewById(R.id.sat_text);
