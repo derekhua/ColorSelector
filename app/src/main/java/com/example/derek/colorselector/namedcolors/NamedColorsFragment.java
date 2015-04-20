@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.derek.colorselector.R;
 import com.example.derek.colorselector.contentprovider.ColorContentProvider;
@@ -70,16 +71,21 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 
         fillData();
 
-        mListView.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
-//
-//                if (ColorCursorAdapter.isTaskCompleted(view))
-//                    deleteTask( id );
-//                else
-//                    updateTask( id );
+            public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+                // get a cursor at this position
+                Cursor entry = (Cursor) mListView.getItemAtPosition(position);
 
-                return true; // consume the click event
+                // retrieve values
+                String name = entry.getString(ColorCursorAdapter.NAME);
+                String hue = entry.getString(ColorCursorAdapter.HUE);
+                String saturation = entry.getString(ColorCursorAdapter.SATURATION);
+                String value = entry.getString(ColorCursorAdapter.VALUE);
+
+                // make Toast
+                Toast.makeText(getActivity(), name + ":\n" + "Hue: " + hue + "\nSaturation: " +
+                        saturation + "\nValue: " + value, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -136,7 +142,6 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        mCursor = data;
           mAdapter.swapCursor(data);
     }
 

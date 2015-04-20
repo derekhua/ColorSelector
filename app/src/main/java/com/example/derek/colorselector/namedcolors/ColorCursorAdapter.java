@@ -19,11 +19,11 @@ public class ColorCursorAdapter extends CursorAdapter {
 
     // Fields from the database (projection)
     // Must include the _id column for the adapter to work
-    static private final int ID = 0;
-    static private final int NAME =1;
-    static private final int HUE = 2;
-    static private final int SATURATION= 3;
-    static private final int VALUE = 4;
+    static public final int ID = 0;
+    static public final int NAME = 1;
+    static public final int HUE = 2;
+    static public final int SATURATION= 3;
+    static public final int VALUE = 4;
 
     private LayoutInflater mInflater;
 
