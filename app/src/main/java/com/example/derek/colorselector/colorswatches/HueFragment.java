@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ public class HueFragment extends Fragment {
 
     private TextView mHueSwatchNumberText;
     private TextView mHueCenterDegreeNumberText;
+    private TextView mCenterPreview;
     private ListView mListView;
 
     @Override
@@ -164,6 +166,9 @@ public class HueFragment extends Fragment {
 
                 // for other SeekBar
                 mHueCenterDegreeNumberText = new TextView(getActivity());
+                mCenterPreview = new TextView(getActivity());
+                mCenterPreview.setBackgroundColor(Color.HSVToColor(new float[] {HUE_CENTER_DEGREE, 1, 1}));
+
                 mHueCenterDegreeNumberText.setText(HUE_CENTER_DEGREE.toString() + "°");
                 mHueCenterDegreeNumberText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 mHueCenterDegreeNumberText.setPadding(10, 10, 10, 10);
@@ -175,6 +180,7 @@ public class HueFragment extends Fragment {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         mHueCenterDegreeNumberText.setText(Integer.toString(seekBarColorCenter.getProgress()) + "°");
+                        mCenterPreview.setBackgroundColor(Color.HSVToColor(new float[] {seekBarColorCenter.getProgress(), 1, 1}));
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -191,6 +197,7 @@ public class HueFragment extends Fragment {
                 linearLayout.addView(mHueSwatchNumberText);
                 linearLayout.addView(seekBarColorCenter);
                 linearLayout.addView(mHueCenterDegreeNumberText);
+                linearLayout.addView(mCenterPreview);
 
                 // set the layout
                 alert.setView(linearLayout);
