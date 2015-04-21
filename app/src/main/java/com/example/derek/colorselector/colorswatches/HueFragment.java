@@ -38,8 +38,11 @@ public class HueFragment extends Fragment {
     // for shared prefs
     private Integer HUE_SWATCH_NUMBER;    
     private String HUE_SWATCH_NUMBER_PREF = "hueswatchnumber";
-   
+    private Integer HUE_CENTER_DEGREE;
+    private String HUE_CENTER_DEGREE_PREF = "huecenterdegree";
+
     private TextView mHueSwatchNumberText;
+    private TextView mHueCenterDegreeNumberText;
     private ListView mListView;
 
     @Override
@@ -53,11 +56,26 @@ public class HueFragment extends Fragment {
         super.onStart();        
 
         HUE_SWATCH_NUMBER = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(HUE_SWATCH_NUMBER_PREF, 12);
-        
+        HUE_CENTER_DEGREE = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(HUE_CENTER_DEGREE_PREF, 0);
+
         Button button = (Button) getActivity().findViewById(R.id.hue_color_swatch_button);
 
+        // the size of the gradient
+        float delta = 360f / (float)(HUE_SWATCH_NUMBER);
+
+        // the first left point degree
+        float hueStartingPoint;
+
+        // for the wrap around
+        if((delta/2) > HUE_CENTER_DEGREE) {
+            float temp = (delta/2) - HUE_CENTER_DEGREE;
+            hueStartingPoint = 360f - temp;
+        } else {
+            hueStartingPoint = HUE_CENTER_DEGREE - (delta/2);
+        }
+
         // get the hsv array
-        mColorList = ColorCreator.getColorListHue(345, 1, 1, 30, HUE_SWATCH_NUMBER);
+        mColorList = ColorCreator.getColorListHue(hueStartingPoint, 1, 1, delta, HUE_SWATCH_NUMBER);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
         
         // get the list view and set the adapter
@@ -76,13 +94,23 @@ public class HueFragment extends Fragment {
                 Bundle args = new Bundle();
 
                 float delta = 360f / (float)(HUE_SWATCH_NUMBER);
+                float hueStartingPoint;
 
-                float hue = 345;
+                // for the wrap around
+                if((delta/2) > HUE_CENTER_DEGREE) {
+                    float temp = (delta/2) - HUE_CENTER_DEGREE;
+                    hueStartingPoint = 360f - temp;
+                } else {
+                    hueStartingPoint = HUE_CENTER_DEGREE - (delta/2);
+                }
+
+                float hue = hueStartingPoint;
                 hue += (delta * position);
                 hue %= 360;
 
                 args.putFloat("hue", hue);
                 args.putFloat("huedelta", delta);
+
                 newFragment.setArguments(args);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -103,11 +131,11 @@ public class HueFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Set number of swatches");
+                alert.setTitle("Set number of swatches & first center degree");
 
                 LinearLayout linearLayout = new LinearLayout(getActivity());
-
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
+
                 mHueSwatchNumberText = new TextView(getActivity());
                 mHueSwatchNumberText.setText(HUE_SWATCH_NUMBER.toString());
                 mHueSwatchNumberText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -121,29 +149,59 @@ public class HueFragment extends Fragment {
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         mHueSwatchNumberText.setText(Integer.toString(seekBar.getProgress() + 1));
                     }
+
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
 
                     }
+
                     // dynamically show the number
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         HUE_SWATCH_NUMBER = seekBar.getProgress() + 1;
                     }
                 });
+
+                // for other SeekBar
+                mHueCenterDegreeNumberText = new TextView(getActivity());
+                mHueCenterDegreeNumberText.setText(HUE_CENTER_DEGREE.toString() + "°");
+                mHueCenterDegreeNumberText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                mHueCenterDegreeNumberText.setPadding(10, 10, 10, 10);
+
+                final SeekBar seekBarColorCenter = new SeekBar(getActivity());
+                seekBarColorCenter.setMax(360);
+                seekBarColorCenter.setProgress(HUE_CENTER_DEGREE);
+                seekBarColorCenter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        mHueCenterDegreeNumberText.setText(Integer.toString(seekBarColorCenter.getProgress()) + "°");
+                    }
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+                    // dynamically show the number
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        HUE_CENTER_DEGREE = seekBar.getProgress();
+                    }
+                });
+
                 // add to layout
                 linearLayout.addView(seekBar);
                 linearLayout.addView(mHueSwatchNumberText);
+                linearLayout.addView(seekBarColorCenter);
+                linearLayout.addView(mHueCenterDegreeNumberText);
+
                 // set the layout
                 alert.setView(linearLayout);
 
                 alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(), "Swatch Number: " + HUE_SWATCH_NUMBER, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Swatch Number: " + HUE_SWATCH_NUMBER +
+                                        "\nCenter Degree: " + HUE_CENTER_DEGREE + "°", Toast.LENGTH_SHORT).show();
                         updateAfterAlert();
                     }
                 });
-
                 alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -157,9 +215,10 @@ public class HueFragment extends Fragment {
     // update after alert dialog
     private void updateAfterAlert() {
         float delta = 360f / (float)(HUE_SWATCH_NUMBER);
+        float hueStartingPoint = HUE_CENTER_DEGREE - (delta/2);
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListHue(345, 1, 1, delta, HUE_SWATCH_NUMBER);
+        mColorList = ColorCreator.getColorListHue(hueStartingPoint, 1, 1, delta, HUE_SWATCH_NUMBER);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
         mListView.setAdapter(mAdapter);
     }
@@ -179,6 +238,7 @@ public class HueFragment extends Fragment {
         SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
         // storing order preference
         editor.putInt(HUE_SWATCH_NUMBER_PREF, HUE_SWATCH_NUMBER);
+        editor.putInt(HUE_CENTER_DEGREE_PREF, HUE_CENTER_DEGREE);
         // immediately
         editor.commit();
     }

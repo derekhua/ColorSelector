@@ -187,7 +187,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                             Float.toString(mLeftValue), Float.toString(mRightValue)},
                     // order-by
                     SORT_ORDERS[sortOrderNum]);
-        } else {
+        } else if(mRightHue > mLeftHue){
             cursorLoader
                     = new CursorLoader(getActivity(),
                     ColorContentProvider.CONTENT_URI,
@@ -198,6 +198,20 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                             "(" + ColorTable.COLUMN_VALUE + " >=? AND " + ColorTable.COLUMN_VALUE + " <=?)",
                     // args
                     new String[]{Float.toString(mLeftHue), Float.toString(mRightHue),
+                            Float.toString(mLeftSaturation), Float.toString(mRightSaturation),
+                            Float.toString(mLeftValue), Float.toString(mRightValue)},
+                    // order-by
+                    SORT_ORDERS[sortOrderNum]);
+        } else {    // same
+            cursorLoader
+                    = new CursorLoader(getActivity(),
+                    ColorContentProvider.CONTENT_URI,
+                    ColorCursorAdapter.PROJECTION,
+                    // selection
+                            "(" + ColorTable.COLUMN_SATURATION + " >=? AND " + ColorTable.COLUMN_SATURATION + " <=?) AND " +
+                            "(" + ColorTable.COLUMN_VALUE + " >=? AND " + ColorTable.COLUMN_VALUE + " <=?)",
+                    // args
+                    new String[]{
                             Float.toString(mLeftSaturation), Float.toString(mRightSaturation),
                             Float.toString(mLeftValue), Float.toString(mRightValue)},
                     // order-by
