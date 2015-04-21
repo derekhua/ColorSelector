@@ -59,17 +59,20 @@ public class ColorAdapter extends ArrayAdapter<Integer[]>{
 //                                                                  colorsList.get(position)[1]});
 //        // set background
 //        viewHolder.preview.setBackground(drawable);
+//        return convertView;
 
         // create gradient
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setColors(colorsBetween(colorsList.get(position)[0], colorsList.get(position)[1], 10));
+        drawable.setColors(colorsBetween(colorsList.get(position)[0], colorsList.get(position)[1], 15));
         drawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
         viewHolder.preview.setBackground(drawable);
         return convertView;
     }
 
     // function to better interpolate
-    private int[] colorsBetween(int left, int right, int amount) {
+    private int[] colorsBetween(int left,       // left color
+                                int right,      // right color
+                                int amount) {   // amount of intermediates
         float[] hsvLeft = new float[3];
         Color.colorToHSV(left, hsvLeft);
 
