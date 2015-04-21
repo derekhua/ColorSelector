@@ -1,6 +1,7 @@
 package com.example.derek.colorselector.colorswatches;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,12 +53,48 @@ public class ColorAdapter extends ArrayAdapter<Integer[]>{
         }
 
 
-        // create gradient
-        GradientDrawable drawable = new GradientDrawable( GradientDrawable.Orientation.LEFT_RIGHT,
-                                                          new int[] {colorsList.get(position)[0], colorsList.get(position)[1]});
-        // set background
-        viewHolder.preview.setBackground(drawable);
+//        // create gradient
+//        GradientDrawable drawable = new GradientDrawable( GradientDrawable.Orientation.LEFT_RIGHT,
+//                                                          new int[] {colorsList.get(position)[0],
+//                                                                  colorsList.get(position)[1]});
+//        // set background
+//        viewHolder.preview.setBackground(drawable);
 
+        // create gradient
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColors(colorsBetween(colorsList.get(position)[0], colorsList.get(position)[1], 10));
+        drawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+        viewHolder.preview.setBackground(drawable);
         return convertView;
+    }
+
+    // function to better interpolate
+    private int[] colorsBetween(int left, int right, int amount) {
+        float[] hsvLeft = new float[3];
+        Color.colorToHSV(left, hsvLeft);
+
+        float[] hsvRight = new float[3];
+        Color.colorToHSV(right, hsvRight);
+
+        // get the difference
+        float difference;
+        if(hsvRight[0] > hsvLeft[0]) {
+            // normal
+            difference = hsvRight[0] - hsvLeft[0];
+        } else {
+            difference  = (360 - hsvLeft[0]) + hsvRight[0];
+        }
+
+        // find the step size
+        float step = difference/amount;
+
+        int[] colors = new int[amount];
+        float current = hsvLeft[0];
+        for(int i = 0; i < amount; ++i) {
+            colors[i] = Color.HSVToColor(new float[] {current, hsvLeft[1], hsvRight[2]});
+            current += step;
+            current%= 360;
+        }
+        return colors;
     }
 }
