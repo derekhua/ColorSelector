@@ -27,11 +27,12 @@ public class ColorCreator {
     // create a List of colors pairs (saturation changing)
     public static ArrayList<Integer[]> getColorListSaturation( float h, float s, float v,    // starting values
                                                                float satChange,              // degree varying
-                                                               int size ) {                  // size of list
+                                                               int size,                     // size of list
+                                                               float hueDelta) {             // hue change
         ArrayList<Integer[]> list = new ArrayList<>();
         for(int i = 0; i < size; ++i) {
             int colorLeft = Color.HSVToColor(new float[] {h, s, v});
-            int colorRight = Color.HSVToColor(new float[] {(h+30)%360, s, v});
+            int colorRight = Color.HSVToColor(new float[] {(h+hueDelta)%360, s, v});
 
             s -= satChange;
             list.add(new Integer[] {colorLeft, colorRight});
@@ -42,11 +43,12 @@ public class ColorCreator {
     // create a List of colors pairs (value changing)
     public static ArrayList<Integer[]> getColorListValue( float h, float s, float v,    // starting values
                                                           float valChange,              // degree varying
-                                                          int size ) {                  // size of list
+                                                          int size,                     // size of list
+                                                          float hueDelta) {             // hue change
         ArrayList<Integer[]> list = new ArrayList<>();
         for(int i = 0; i < size; ++i) {
             int colorLeft = Color.HSVToColor(new float[] {h, s, v});
-            int colorRight = Color.HSVToColor(new float[] {(h+30)%360, s, v});
+            int colorRight = Color.HSVToColor(new float[] {(h+hueDelta)%360, s, v});
 
             v -= valChange;
             list.add(new Integer[] {colorLeft, colorRight});

@@ -206,6 +206,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         return cursorLoader;
     }
 
+    // swaps the cursor with the loaded cursor
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
           mAdapter.swapCursor(data);

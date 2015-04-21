@@ -24,6 +24,7 @@ public class ResultsFragment extends Fragment {
     private float rightHue;
 
     private float mHue;
+    private float mHueDelta;
     private float mSaturation;
     private float mSaturationDelta;
     private float mValue;
@@ -33,6 +34,7 @@ public class ResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         mHue = bundle.getFloat("hue");
+        mHueDelta = bundle.getFloat("huedelta");
         mSaturation = bundle.getFloat("saturation");
         mSaturationDelta = bundle.getFloat("saturationdelta");
         mValue = bundle.getFloat("value");
@@ -53,16 +55,16 @@ public class ResultsFragment extends Fragment {
         satResult = (TextView) getActivity().findViewById(R.id.sat_text);
         valResult = (TextView) getActivity().findViewById(R.id.val_text);
 
-        rightHue = (mHue + 30)%360;
+        rightHue = (mHue + mHueDelta)%360;
 
         // in percent format
         float saturation = mSaturation * 100f;
         float value = mValue * 100f;
 
         // set the views
-        hueResult.setText("The hue ranges from " + mHue + "° to " + rightHue + "°.");
-        satResult.setText("The saturation is at " + saturation + "%.");
-        valResult.setText("The value is at " + value + "%.");
+        hueResult.setText("The hue ranges from " + mHue + "° to " + rightHue + "°");
+        satResult.setText("The saturation is at " + saturation + "% ±" + mSaturationDelta/2f*100);
+        valResult.setText("The value is at " + value + "% ±" + mValueDelta/2f*100);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

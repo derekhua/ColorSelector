@@ -36,6 +36,7 @@ public class SaturationFragment extends Fragment {
     ListView mListView;
 
     private float mHue;
+    private float mHueDelta;
 
     private Integer SAT_SWATCH_NUMBER;
     private String SAT_SWATCH_NUMBER_PREF = "swatchnumberpref";
@@ -45,6 +46,8 @@ public class SaturationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         mHue = bundle.getFloat("hue");
+        mHueDelta = bundle.getFloat("huedelta");
+
         // use this layout
         return inflater.inflate(R.layout.saturation_view, container, false);
     }
@@ -56,18 +59,12 @@ public class SaturationFragment extends Fragment {
         SAT_SWATCH_NUMBER = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(SAT_SWATCH_NUMBER_PREF, 11);
 
         Button button = (Button) getActivity().findViewById(R.id.sat_swatch_number_button);
-        // position 0: 345° to 15°
-        // position 1: 15° to 45° ...
-//
-//        float hue = 345;
-//        hue += (30 * mPosition);
-//        hue %= 360;
 
         // 100 / (SAT_SWATCH_NUMBER-1) = delta
         float delta = 1.0f / (float)(SAT_SWATCH_NUMBER - 1);
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListSaturation(mHue, 1, 1, delta, SAT_SWATCH_NUMBER);
+        mColorList = ColorCreator.getColorListSaturation(mHue, 1, 1, delta, SAT_SWATCH_NUMBER, mHueDelta);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
 
         // get the list view and set the adapter
@@ -85,9 +82,15 @@ public class SaturationFragment extends Fragment {
                 // use this to send info
                 Bundle args = new Bundle();
                 args.putFloat("hue", mHue);
+                args.putFloat("huedelta", mHueDelta);
 
                 float saturation = 1f;
-                float delta = 1.0f / (float)(SAT_SWATCH_NUMBER - 1);
+                float delta;
+                if(SAT_SWATCH_NUMBER == 1) {
+                    delta = 2.0f;
+                } else {
+                    delta = 1.0f / (float) (SAT_SWATCH_NUMBER - 1);
+                }
                 saturation -= (delta * position);
 
                 args.putFloat("saturation", saturation);
@@ -121,13 +124,14 @@ public class SaturationFragment extends Fragment {
                 mSatSeekbarNumberText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 mSatSeekbarNumberText.setPadding(10, 10, 10, 10);
 
+                // set initial values
                 SeekBar seekBar = new SeekBar(getActivity());
-                seekBar.setMax(256);
+                seekBar.setMax(255);
                 seekBar.setProgress(SAT_SWATCH_NUMBER);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        mSatSeekbarNumberText.setText(Integer.toString(seekBar.getProgress()));
+                        mSatSeekbarNumberText.setText(Integer.toString(seekBar.getProgress() + 1));
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -136,7 +140,7 @@ public class SaturationFragment extends Fragment {
                     // dynamically show the number
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        SAT_SWATCH_NUMBER = seekBar.getProgress();
+                        SAT_SWATCH_NUMBER = seekBar.getProgress() + 1;
                     }
                 });
                 // add to layout
@@ -170,7 +174,7 @@ public class SaturationFragment extends Fragment {
 //        hue %= 360;
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListSaturation(mHue, 1, 1, delta, SAT_SWATCH_NUMBER);
+        mColorList = ColorCreator.getColorListSaturation(mHue, 1, 1, delta, SAT_SWATCH_NUMBER, mHueDelta);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
         mListView.setAdapter(mAdapter);
     }

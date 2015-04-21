@@ -41,6 +41,7 @@ public class ValueFragment extends Fragment{
     private TextView mValSeekerbarNumberText;
 
     private float mHue;
+    private float mHueDelta;
     private float mSaturation;
     private float mSaturationDelta;
 
@@ -48,6 +49,7 @@ public class ValueFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         mHue = bundle.getFloat("hue");
+        mHueDelta = bundle.getFloat("huedelta");
         mSaturation = bundle.getFloat("saturation");
         mSaturationDelta = bundle.getFloat("saturationdelta");
         // use this layout
@@ -65,7 +67,7 @@ public class ValueFragment extends Fragment{
         float delta = 1.0f / (float)(VAL_SWATCH_NUMBER - 1);
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListValue(mHue, mSaturation, 1, delta, VAL_SWATCH_NUMBER);
+        mColorList = ColorCreator.getColorListValue(mHue, mSaturation, 1, delta, VAL_SWATCH_NUMBER, mHueDelta);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
 
         // get the list view and set the adapter
@@ -84,13 +86,18 @@ public class ValueFragment extends Fragment{
                 Bundle args = new Bundle();
 
                 args.putFloat("hue", mHue);
+                args.putFloat("huedelta", mHueDelta);
                 args.putFloat("saturation", mSaturation);
                 args.putFloat("saturationdelta", mSaturationDelta);
 
                 float value = 1f;
-                float delta = 1.0f / (float)(VAL_SWATCH_NUMBER - 1);
+                float delta;
+                if(VAL_SWATCH_NUMBER == 1) {
+                    delta = 2.0f;
+                } else {
+                    delta = 1.0f / (float) (VAL_SWATCH_NUMBER - 1);
+                }
                 value -= (delta * position);
-
                 args.putFloat("value", value);
                 args.putFloat("valuedelta", delta);
                 newFragment.setArguments(args);
@@ -107,7 +114,6 @@ public class ValueFragment extends Fragment{
             }
         });
 
-        // shows AlertDialog
         // shows the AlertDialog
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,13 +129,14 @@ public class ValueFragment extends Fragment{
                 mValSeekerbarNumberText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 mValSeekerbarNumberText.setPadding(10, 10, 10, 10);
 
+                // set initial values
                 SeekBar seekBar = new SeekBar(getActivity());
-                seekBar.setMax(256);
+                seekBar.setMax(255);
                 seekBar.setProgress(VAL_SWATCH_NUMBER);
                 seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        mValSeekerbarNumberText.setText(Integer.toString(seekBar.getProgress()));
+                        mValSeekerbarNumberText.setText(Integer.toString(seekBar.getProgress() + 1));
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -137,7 +144,7 @@ public class ValueFragment extends Fragment{
                     // dynamically show the number
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        VAL_SWATCH_NUMBER = seekBar.getProgress();
+                        VAL_SWATCH_NUMBER = seekBar.getProgress() + 1;
                     }
                 });
                 // add to layout
@@ -168,7 +175,7 @@ public class ValueFragment extends Fragment{
         float delta = 1.0f / (float)(VAL_SWATCH_NUMBER-1);
 
         // get the hsv array
-        mColorList = ColorCreator.getColorListValue(mHue, mSaturation, 1, delta, VAL_SWATCH_NUMBER);
+        mColorList = ColorCreator.getColorListValue(mHue, mSaturation, 1, delta, VAL_SWATCH_NUMBER, mHueDelta);
         mAdapter = new ColorAdapter(getActivity(), mColorList);
         mListView.setAdapter(mAdapter);
     }
