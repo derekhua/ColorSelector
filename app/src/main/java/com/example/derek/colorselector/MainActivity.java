@@ -7,20 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.derek.colorselector.colorswatches.HueFragment;
-
 
 public class MainActivity extends ActionBarActivity {
 
     FragmentManager fm;
-    HueFragment firstFragment;
+    StartingChoiceFragment firstFragment;
 
-    public final String HUE_FRAGMENT = "hueFragment";
-    public final String SAT_FRAGMENT = "saturationFragment";
-    public final String VAL_FRAGMENT = "valueFragment";
-    public final String RES_FRAGMENT = "resultsFragment";
-
-    public String currentFragment;
+    public final String STARTING_CHOICE_FRAGMENT = "startingchoicefragment";
+//    public final String HUE_FRAGMENT = "hueFragment";
+//    public final String SAT_FRAGMENT = "saturationFragment";
+//    public final String VAL_FRAGMENT = "valueFragment";
+//    public final String RES_FRAGMENT = "resultsFragment";
+//
+//    public String currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +36,18 @@ public class MainActivity extends ActionBarActivity {
             }
 
             fm = getFragmentManager();
-            firstFragment = (HueFragment) fm.findFragmentByTag(HUE_FRAGMENT);
+            firstFragment = (StartingChoiceFragment) fm.findFragmentByTag(STARTING_CHOICE_FRAGMENT);
 
             // if mFragment is non-null, then its currently being retain across configuration changes
             if(firstFragment == null) {
                 // Create a new Fragment to be placed in the activity layout
-                firstFragment = new HueFragment();
+                firstFragment = new StartingChoiceFragment();
                 // In case this activity was started with special instructions from an
                 // Intent, pass the Intent's extras to the fragment as arguments
 //            firstFragment.setArguments(getIntent().getExtras());
 
                 // Add the fragment to the 'fragment_container' FrameLayout
-                fm.beginTransaction().add(R.id.fragment_container, firstFragment, HUE_FRAGMENT).addToBackStack(null).commit();
+                fm.beginTransaction().add(R.id.fragment_container, firstFragment, STARTING_CHOICE_FRAGMENT).addToBackStack(null).commit();
             }
         }
     }

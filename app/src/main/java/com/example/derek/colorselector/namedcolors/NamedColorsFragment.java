@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.derek.colorselector.R;
@@ -38,6 +40,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
     private float mLeftValue;
 
     ListView mListView;
+    TextView textView;
 
     private float mSaturation;
     private float mSaturationDelta;
@@ -95,13 +98,14 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                alertDialog.setTitle("Sort by: ");
+                alertDialog.setTitle(getResources().getString(R.string.sort_by) + ": ");
                 alertDialog.setSingleChoiceItems(SORT_ORDERS, sortOrderNum,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                     sortOrderNum = which;
-                                    Toast.makeText(getActivity(), "Sort by: " + SORT_ORDERS[which], Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), (getResources().getString(R.string.sort_by) + ": ")
+                                            + SORT_ORDERS[which], Toast.LENGTH_SHORT).show();
                                     updateAfterSort();
                             }
                         });
@@ -132,8 +136,10 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
                 String value = entry.getString(ColorCursorAdapter.VALUE);
 
                 // make Toast
-                Toast.makeText(getActivity(), name + ":\n" + "Hue: " + hue + "\nSaturation: " +
-                        saturation + "\nValue: " + value, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), name + ":\n" + getResources().getString(R.string.hue) + ": " + hue + "\n" +
+                        getResources().getString(R.string.saturation) + ": " +
+                        saturation + "\n" +
+                        getResources().getString(R.string.value) + ": " + value, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -223,7 +229,15 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
     // swaps the cursor with the loaded cursor
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-          mAdapter.swapCursor(data);
+
+        mAdapter.swapCursor(data);
+
+        if(mListView.getCount() == 0) {
+            textView = new TextView(getActivity());
+            textView.setText("No match found");
+            textView.setTextColor(Color.WHITE);
+            mListView.addHeaderView(textView);
+        }
     }
 
     @Override

@@ -133,7 +133,7 @@ public class HueFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Set number of swatches & first center degree");
+                alert.setTitle(getResources().getString(R.string.set_swatch_center));
 
                 LinearLayout linearLayout = new LinearLayout(getActivity());
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -202,14 +202,15 @@ public class HueFragment extends Fragment {
                 // set the layout
                 alert.setView(linearLayout);
 
-                alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                alert.setPositiveButton(getResources().getString(R.string.ok),new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(), "Swatch Number: " + HUE_SWATCH_NUMBER +
-                                        "\nCenter Degree: " + HUE_CENTER_DEGREE + "°", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.swatch_number) + ": " + HUE_SWATCH_NUMBER +
+                                        "\n" + getResources().getString(R.string.center_degree) + ": "
+                                + HUE_CENTER_DEGREE + getResources().getString(R.string.degree), Toast.LENGTH_SHORT).show();
                         updateAfterAlert();
                     }
                 });
-                alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                alert.setNegativeButton(getResources().getString(R.string.cancel),new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
@@ -222,7 +223,15 @@ public class HueFragment extends Fragment {
     // update after alert dialog
     private void updateAfterAlert() {
         float delta = 360f / (float)(HUE_SWATCH_NUMBER);
-        float hueStartingPoint = HUE_CENTER_DEGREE - (delta/2);
+        float hueStartingPoint;
+
+        // for the wrap around
+        if((delta/2) > HUE_CENTER_DEGREE) {
+            float temp = (delta/2) - HUE_CENTER_DEGREE;
+            hueStartingPoint = 360f - temp;
+        } else {
+            hueStartingPoint = HUE_CENTER_DEGREE - (delta/2);
+        }
 
         // get the hsv array
         mColorList = ColorCreator.getColorListHue(hueStartingPoint, 1, 1, delta, HUE_SWATCH_NUMBER);

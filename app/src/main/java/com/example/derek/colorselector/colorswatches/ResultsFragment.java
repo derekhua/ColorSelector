@@ -62,9 +62,15 @@ public class ResultsFragment extends Fragment {
         float value = mValue * 100f;
 
         // set the views
-        hueResult.setText("The hue ranges from " + mHue + "° to " + rightHue + "°");
-        satResult.setText("The saturation is at " + saturation + "% ±" + mSaturationDelta/2f*100);
-        valResult.setText("The value is at " + value + "% ±" + mValueDelta/2f*100);
+        hueResult.setText(getResources().getString(R.string.hue_ranges) + " " + mHue + getResources().getString(R.string.degree) + " "
+                + getResources().getString(R.string.to) + " "
+                + rightHue
+                + getResources().getString(R.string.degree));
+
+        satResult.setText(getResources().getString(R.string.saturation_is) + " " + saturation + getResources().getString(R.string.percent) + " "
+        + getResources().getString(R.string.plusminus) + mSaturationDelta/2f*100);
+        valResult.setText((getResources().getString(R.string.value_is) + " " + value + getResources().getString(R.string.percent) + " "
+        + getResources().getString(R.string.plusminus) + mValueDelta/2f*100));
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

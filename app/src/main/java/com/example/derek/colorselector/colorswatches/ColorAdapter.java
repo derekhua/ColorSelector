@@ -63,7 +63,11 @@ public class ColorAdapter extends ArrayAdapter<Integer[]>{
 
         // create gradient
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setColors(colorsBetween(colorsList.get(position)[0], colorsList.get(position)[1], 15));
+        if(colorsList.size() == 1) {
+            drawable.setColors(colorsBetween(colorsList.get(position)[0], (colorsList.get(position)[0]), 15));
+        } else {
+            drawable.setColors(colorsBetween(colorsList.get(position)[0], colorsList.get(position)[1], 15));
+        }
         drawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
         viewHolder.preview.setBackground(drawable);
         return convertView;
@@ -84,7 +88,10 @@ public class ColorAdapter extends ArrayAdapter<Integer[]>{
         if(hsvRight[0] > hsvLeft[0]) {
             // normal
             difference = hsvRight[0] - hsvLeft[0];
-        } else {
+        }
+        else if (hsvRight[0] == hsvLeft[0])
+            difference  = 360;
+        else {
             difference  = (360 - hsvLeft[0]) + hsvRight[0];
         }
 

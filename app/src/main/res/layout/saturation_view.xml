@@ -5,9 +5,9 @@
     android:id="@+id/saturation_view">
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Configure Color Swatches"
+        android:text="@string/configure_color"
         android:id="@+id/sat_swatch_number_button"
         android:layout_gravity="center_horizontal" />
 

@@ -25,6 +25,8 @@ public class ColorCursorAdapter extends CursorAdapter {
     static public final int SATURATION= 3;
     static public final int VALUE = 4;
 
+    private int mCount;
+
     private LayoutInflater mInflater;
 
     static public final String[] PROJECTION
@@ -36,19 +38,10 @@ public class ColorCursorAdapter extends CursorAdapter {
             ColorTable.COLUMN_VALUE
     };
 
-    static public final String ORDER_BY
-            = ColorTable.COLUMN_NAME + "," +
-            ColorTable.COLUMN_HUE + "," +
-            ColorTable.COLUMN_SATURATION + "," +
-            ColorTable.COLUMN_VALUE;
-
-
     public ColorCursorAdapter(Context context, Cursor cursor, int flag) {
         super(context, cursor, flag);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-    static private final int TRUE = 1;
 
     static private class ViewHolder {
         TextView preview;
@@ -76,6 +69,8 @@ public class ColorCursorAdapter extends CursorAdapter {
 
         row.setTag( viewHolder );
 
+        ++mCount;
+
         return row;
     }
 
@@ -91,5 +86,10 @@ public class ColorCursorAdapter extends CursorAdapter {
         viewHolder.preview.setBackgroundColor(Color.HSVToColor(new float[] {
                 cursor.getFloat(HUE), cursor.getFloat(SATURATION), cursor.getFloat(VALUE)
         }));
+    }
+
+
+    public int getSize() {
+        return mCount;
     }
 }

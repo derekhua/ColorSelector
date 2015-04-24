@@ -114,7 +114,7 @@ public class SaturationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Set number of swatches");
+                alert.setTitle(getResources().getString(R.string.set_swatch_number));
 
                 LinearLayout linearLayout = new LinearLayout(getActivity());
 
@@ -149,14 +149,15 @@ public class SaturationFragment extends Fragment {
                 // set the layout
                 alert.setView(linearLayout);
 
-                alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                alert.setPositiveButton(getResources().getString(R.string.ok),new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(), "Swatch Number: " + SAT_SWATCH_NUMBER, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.swatch_number) + ": " + SAT_SWATCH_NUMBER,
+                                Toast.LENGTH_SHORT).show();
                         updateAfterAlert();
                     }
                 });
 
-                alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                alert.setNegativeButton(getResources().getString(R.string.cancel),new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
