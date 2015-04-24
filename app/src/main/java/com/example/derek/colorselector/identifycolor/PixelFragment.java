@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.derek.colorselector.R;
@@ -23,8 +24,7 @@ import java.util.Map;
  */
 public class PixelFragment extends Fragment {
 
-    ImageView imageView;
-    Bitmap bitmap;
+    ImageButton mImageButton;
     byte[] byteArray;
 
     int[] mPixels;
@@ -33,11 +33,14 @@ public class PixelFragment extends Fragment {
 
     TextView mDominantColor;
 
+    boolean toggle = false;
+    int widthButton;
+    int heightButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         Bundle bundle = this.getArguments();
-        bitmap = (Bitmap) bundle.getParcelable("bitmap");
         byteArray = bundle.getByteArray("bytearray");
 
         // use this layout
@@ -47,42 +50,65 @@ public class PixelFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         mDominantColor = (TextView) getActivity().findViewById(R.id.swatch);
-        imageView = (ImageView) getActivity().findViewById(R.id.pixel_image);
-        imageView.setImageBitmap(bmp);
+        mImageButton = (ImageButton) getActivity().findViewById(R.id.pixel_image);
+        mImageButton.setImageBitmap(bitmap);
 
-        int[] pixels = new int[bmp.getWidth()*bmp.getHeight()];
+        int[] pixels = new int[bitmap.getWidth()*bitmap.getHeight()];
 
-        bmp.getPixels(pixels, 0, bmp.getWidth(), 0, 0, bmp.getWidth(), bmp.getHeight());
+        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
 
         findDominant(pixels);
+
+
+        widthButton = mImageButton.getWidth();
+        heightButton = mImageButton.getHeight();
+
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!toggle) {
+                    mImageButton.setLayoutParams(new LinearLayout.LayoutParams(3000, 1000));
+                    toggle = !toggle;
+                } else {
+                    mImageButton.setLayoutParams(new LinearLayout.LayoutParams(widthButton, heightButton));
+                    toggle = !toggle;
+                }
+            }
+        });
     }
 
-    
     // finds dominant color and creates the fragments
     private void findDominant(int[] a) {
         mPixels = a;
+
+        // thread
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Map<Integer, Integer> m = new HashMap<Integer, Integer>();
+                Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 
-                for (int a :  mPixels ) {
-                    Integer freq = m.get(a);
-                    m.put(a, (freq == null) ? 1 : freq + 1);
+                for (int i :  mPixels ) {
+                    Integer freq = map.get(i);
+                    // put in map
+                    map.put(i, (freq == null) ? 1 : freq + 1);
                 }
 
                 int max = -1;
                 mResult = -1;
 
-                for (Map.Entry<Integer, Integer> e : m.entrySet()) {
+                // iterate through map, finding max
+                for (Map.Entry<Integer, Integer> e : map.entrySet()) {
                     if (e.getValue() > max) {
                         mResult = e.getKey();
                         max = e.getValue();
                     }
                 }
+
+                // run on ui
+                // fill the frame layouts
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         int alpha = Color.alpha(mResult);
@@ -119,7 +145,7 @@ public class PixelFragment extends Fragment {
 
                         //error for similar colors
                         float leftHue;
-                        float hueError = 10f;
+                        float hueError = 15f;
 
                         float satAndValError = 0.5f;
                         if(hueError > hue) {

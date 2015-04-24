@@ -62,6 +62,7 @@ public class StartingChoiceFragment extends Fragment {
         Button buttonIdentify = (Button) getActivity().findViewById(R.id.color_identifier_button);
         imageView = (ImageView) getActivity().findViewById(R.id.test_image);
 
+        // starts the camera
         buttonIdentify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,16 +74,18 @@ public class StartingChoiceFragment extends Fragment {
 
     }
 
-
+    // camera buttons pressed
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
 
+            if (resultCode == Activity.RESULT_OK) {
                 Bitmap bmp = (Bitmap) data.getExtras().get("data");
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                // compress
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                // to byte array
                 byte[] byteArray = stream.toByteArray();
 
                 // Create fragment
@@ -91,7 +94,6 @@ public class StartingChoiceFragment extends Fragment {
                 // use this to send info
                 Bundle args = new Bundle();
 
-                args.putParcelable("bitmap", bmp);
                 args.putByteArray("bytearray", byteArray);
                 newFragment.setArguments(args);
 

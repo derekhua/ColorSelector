@@ -35,5 +35,14 @@
     <string name="center_degree">Center Degree</string>
     <string name="set_swatch_center">Set number of swatches and first center degree</string>
 
+    <string name="image_description">View of the Image</string>
+
+    <string name="dominant_color">Dominant Color:</string>
+    <string name="exact_color">Exact Color:</string>
+    <string name="similar_colors">Similar Colors:</string>
+
+    <string name="no_match_found">No match found</string>
+    <string name="exact_match_found">Exact match found</string>
+
 
 </resources>

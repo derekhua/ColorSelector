@@ -66,6 +66,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         mValue = bundle.getFloat("value");
         mValueDelta = bundle.getFloat("valuedelta");
 
+        textView = new TextView(getActivity());
 //        // to match database
 //        mSaturation /= 100f;
 //        mValue /= 100f;
@@ -233,8 +234,7 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         mAdapter.swapCursor(data);
 
         if(mListView.getCount() == 0) {
-            textView = new TextView(getActivity());
-            textView.setText("No match found");
+            textView.setText(getResources().getString(R.string.no_match_found));
             textView.setTextColor(Color.WHITE);
             mListView.addHeaderView(textView);
         }

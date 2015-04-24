@@ -31,6 +31,7 @@ public class ExactColorMatchFragment extends Fragment implements LoaderManager.L
     private ColorCursorAdapter mAdapter;
 
     ListView mListView;
+
     TextView textView;
 
     private float mHue;
@@ -43,7 +44,7 @@ public class ExactColorMatchFragment extends Fragment implements LoaderManager.L
         mHue = bundle.getFloat("hue");
         mSaturation = bundle.getFloat("saturation");
         mValue = bundle.getFloat("value");
-
+        textView = new TextView(getActivity());
         // use this layout
         return inflater.inflate(R.layout.exact_color_match_layout, container, false);
     }
@@ -128,13 +129,12 @@ public class ExactColorMatchFragment extends Fragment implements LoaderManager.L
         mAdapter.swapCursor(data);
 
         if(mListView.getCount() == 0) {
-            textView = new TextView(getActivity());
-            textView.setText("No match found");
+            textView.setText(getResources().getString(R.string.no_match_found));
             textView.setTextColor(Color.WHITE);
             mListView.addHeaderView(textView);
         } else {
             textView = new TextView(getActivity());
-            textView.setText("Exact match found: ");
+            textView.setText(getResources().getString(R.string.exact_match_found));
             textView.setTextColor(Color.WHITE);
             mListView.addHeaderView(textView);
         }
