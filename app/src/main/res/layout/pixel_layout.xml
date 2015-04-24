@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#414543">
+
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pixel_image"
+        android:contentDescription="@string/image_description"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dominant_color"
+        android:textColor="#FFFFFF"
+        android:layout_toEndOf="@id/pixel_image"
+        android:id="@+id/dominant_text"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="    "
+        android:id="@+id/swatch"
+        android:layout_alignStart="@+id/dominant_text"
+        android:layout_below="@+id/dominant_text"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exact_color"
+        android:textColor="#FFFFFF"
+
+        android:layout_alignStart="@+id/swatch"
+        android:layout_below="@+id/swatch"
+        android:id="@+id/exact_text"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/pixel_frame1"
+        android:layout_below="@+id/exact_text"
+        android:layout_alignStart="@+id/exact_text"
+
+        >
+
+        </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/similar_colors"
+        android:textColor="#FFFFFF"
+        android:id="@+id/similar_colors"
+        android:layout_below="@+id/pixel_frame1"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="540dp"
+        android:id="@+id/pixel_frame2"
+        android:layout_below="@+id/similar_colors"
+        >
+
+        </FrameLayout>
+
+</RelativeLayout>
