@@ -2,6 +2,7 @@ package com.example.derek.colorselector.colorswatches;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +72,10 @@ public class ResultsFragment extends Fragment {
         + getResources().getString(R.string.plusminus) + mSaturationDelta/2f*100);
         valResult.setText((getResources().getString(R.string.value_is) + " " + value + getResources().getString(R.string.percent) + " "
         + getResources().getString(R.string.plusminus) + mValueDelta/2f*100));
+
+        // change button color
+        Button nextButton = (Button) getActivity().findViewById(R.id.next_button);
+        nextButton.setTextColor(Color.HSVToColor(new float[] {mHue, mSaturation, mValue}));
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

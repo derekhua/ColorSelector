@@ -44,6 +44,15 @@ public class ExactColorMatchFragment extends Fragment implements LoaderManager.L
         mHue = bundle.getFloat("hue");
         mSaturation = bundle.getFloat("saturation");
         mValue = bundle.getFloat("value");
+
+        //Toast.makeText(getActivity(), Float.toString(mHue) + "\n" + Float.toString(mSaturation) + "\n" + Float.toString(mValue), Toast.LENGTH_LONG).show();
+
+        mHue = Math.round(mHue);
+        mSaturation = Math.round(mSaturation * 100f) / 100f;
+        mValue = Math.round(mValue * 100f) / 100f;
+
+        //Toast.makeText(getActivity(), Float.toString(mHue) + "\n" + Float.toString(mSaturation) + "\n" + Float.toString(mValue), Toast.LENGTH_LONG).show();
+
         textView = new TextView(getActivity());
         // use this layout
         return inflater.inflate(R.layout.exact_color_match_layout, container, false);
@@ -61,20 +70,22 @@ public class ExactColorMatchFragment extends Fragment implements LoaderManager.L
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
-                // get a cursor at this position
-                Cursor entry = (Cursor) mListView.getItemAtPosition(position);
+                if(position != 0) {
+                    // get a cursor at this position
+                    Cursor entry = (Cursor) mListView.getItemAtPosition(position);
 
-                // retrieve values
-                String name = entry.getString(ColorCursorAdapter.NAME);
-                String hue = entry.getString(ColorCursorAdapter.HUE);
-                String saturation = entry.getString(ColorCursorAdapter.SATURATION);
-                String value = entry.getString(ColorCursorAdapter.VALUE);
+                    // retrieve values
+                    String name = entry.getString(ColorCursorAdapter.NAME);
+                    String hue = entry.getString(ColorCursorAdapter.HUE);
+                    String saturation = entry.getString(ColorCursorAdapter.SATURATION);
+                    String value = entry.getString(ColorCursorAdapter.VALUE);
 
-                // make Toast
-                Toast.makeText(getActivity(), name + ":\n" + getResources().getString(R.string.hue) + ": " + hue + "\n" +
-                        getResources().getString(R.string.saturation) + ": " +
-                        saturation + "\n" +
-                        getResources().getString(R.string.value) + ": " + value, Toast.LENGTH_SHORT).show();
+                    // make Toast
+                    Toast.makeText(getActivity(), name + ":\n" + getResources().getString(R.string.hue) + ": " + hue + "\n" +
+                            getResources().getString(R.string.saturation) + ": " +
+                            saturation + "\n" +
+                            getResources().getString(R.string.value) + ": " + value, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

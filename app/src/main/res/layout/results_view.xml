@@ -10,45 +10,49 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/hue_text"
         android:layout_gravity="center_horizontal"
 
-        android:layout_weight="1"
         android:textColor="#FFFFFF"
+
+        android:padding="5dp"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/sat_text"
         android:layout_gravity="center_horizontal"
 
-        android:layout_weight="1"
         android:textColor="#FFFFFF"
+
+        android:padding="5dp"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/val_text"
         android:layout_gravity="center_horizontal"
 
-        android:layout_weight="1"
         android:textColor="#FFFFFF"
+
+
+        android:padding="5dp"
         />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Next"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:textSize="50sp"
+        android:padding="20dp"
         android:id="@+id/next_button"
         android:layout_gravity="center_horizontal"
         android:longClickable="false"
-        android:nestedScrollingEnabled="false" />
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="#FF0000"
+
+
+        />
 </LinearLayout>

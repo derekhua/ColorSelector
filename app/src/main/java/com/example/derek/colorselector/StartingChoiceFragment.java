@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.example.derek.colorselector.colorswatches.HueFragment;
 import com.example.derek.colorselector.identifycolor.PixelFragment;
@@ -25,8 +24,6 @@ public class StartingChoiceFragment extends Fragment {
 
     public final String HUE_FRAGMENT = "hueFragment";
     public final String PIXEL_FRAGMENT = "pixelFragment";
-
-    ImageView imageView;
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1888;
 
@@ -60,7 +57,6 @@ public class StartingChoiceFragment extends Fragment {
         });
 
         Button buttonIdentify = (Button) getActivity().findViewById(R.id.color_identifier_button);
-        imageView = (ImageView) getActivity().findViewById(R.id.test_image);
 
         // starts the camera
         buttonIdentify.setOnClickListener(new View.OnClickListener() {

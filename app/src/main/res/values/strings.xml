@@ -44,5 +44,8 @@
     <string name="no_match_found">No match found</string>
     <string name="exact_match_found">Exact match found</string>
 
+    <string name="similar_colors_found">Similar colors found</string>
 
+    <string name="next">Next</string>
+    <string name="bye">Bye!</string>
 </resources>

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.derek.colorselector.R;
@@ -63,26 +62,26 @@ public class PixelFragment extends Fragment {
         findDominant(pixels);
 
 
-        widthButton = mImageButton.getWidth();
-        heightButton = mImageButton.getHeight();
-
-        mImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!toggle) {
-                    mImageButton.setLayoutParams(new LinearLayout.LayoutParams(3000, 1000));
-                    toggle = !toggle;
-                } else {
-                    mImageButton.setLayoutParams(new LinearLayout.LayoutParams(widthButton, heightButton));
-                    toggle = !toggle;
-                }
-            }
-        });
+//        widthButton = mImageButton.getWidth();
+//        heightButton = mImageButton.getHeight();
+//
+//        mImageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!toggle) {
+//                    mImageButton.setLayoutParams(new LinearLayout.LayoutParams(3000, 1000));
+//                    toggle = !toggle;
+//                } else {
+//                    mImageButton.setLayoutParams(new LinearLayout.LayoutParams(widthButton, heightButton));
+//                    toggle = !toggle;
+//                }
+//            }
+//        });
     }
 
     // finds dominant color and creates the fragments
-    private void findDominant(int[] a) {
-        mPixels = a;
+    private void findDominant(int[] pix) {
+        mPixels = pix;
 
         // thread
         new Thread(new Runnable() {

@@ -127,20 +127,22 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
-                // get a cursor at this position
-                Cursor entry = (Cursor) mListView.getItemAtPosition(position);
+                if(position != 0) {
+                    // get a cursor at this position
+                    Cursor entry = (Cursor) mListView.getItemAtPosition(position);
 
-                // retrieve values
-                String name = entry.getString(ColorCursorAdapter.NAME);
-                String hue = entry.getString(ColorCursorAdapter.HUE);
-                String saturation = entry.getString(ColorCursorAdapter.SATURATION);
-                String value = entry.getString(ColorCursorAdapter.VALUE);
+                    // retrieve values
+                    String name = entry.getString(ColorCursorAdapter.NAME);
+                    String hue = entry.getString(ColorCursorAdapter.HUE);
+                    String saturation = entry.getString(ColorCursorAdapter.SATURATION);
+                    String value = entry.getString(ColorCursorAdapter.VALUE);
 
-                // make Toast
-                Toast.makeText(getActivity(), name + ":\n" + getResources().getString(R.string.hue) + ": " + hue + "\n" +
-                        getResources().getString(R.string.saturation) + ": " +
-                        saturation + "\n" +
-                        getResources().getString(R.string.value) + ": " + value, Toast.LENGTH_SHORT).show();
+                    // make Toast
+                    Toast.makeText(getActivity(), name + ":\n" + getResources().getString(R.string.hue) + ": " + hue + "\n" +
+                            getResources().getString(R.string.saturation) + ": " +
+                            saturation + "\n" +
+                            getResources().getString(R.string.value) + ": " + value, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -235,6 +237,10 @@ public class NamedColorsFragment extends Fragment implements LoaderManager.Loade
 
         if(mListView.getCount() == 0) {
             textView.setText(getResources().getString(R.string.no_match_found));
+            textView.setTextColor(Color.WHITE);
+            mListView.addHeaderView(textView);
+        } else {
+            textView.setText(getResources().getString(R.string.similar_colors_found));
             textView.setTextColor(Color.WHITE);
             mListView.addHeaderView(textView);
         }

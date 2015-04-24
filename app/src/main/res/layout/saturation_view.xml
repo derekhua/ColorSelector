@@ -9,7 +9,10 @@
         android:layout_height="wrap_content"
         android:text="@string/configure_color"
         android:id="@+id/sat_swatch_number_button"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="#FFFFFF"
+        />
 
     <ListView
         android:layout_width="match_parent"

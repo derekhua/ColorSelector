@@ -8,24 +8,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/color_explorer"
+        android:textColor="#FFFFFF"
         android:id="@+id/color_explorer_button"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="40dp"
         android:layout_above="@+id/color_identifier_button"
-        android:layout_alignStart="@+id/color_identifier_button" />
+        android:layout_alignStart="@+id/color_identifier_button"
+        style="?android:attr/borderlessButtonStyle" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/color_identifier"
+        android:textColor="#FFFFFF"
         android:id="@+id/color_identifier_button"
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/test_image"/>
+        android:layout_centerHorizontal="true"
+        style="?android:attr/borderlessButtonStyle" />
 
 </RelativeLayout>

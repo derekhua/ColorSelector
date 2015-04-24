@@ -9,7 +9,9 @@
         android:text="@string/configure_sorting"
         android:id="@+id/sorting_order_button"
         android:layout_gravity="center_horizontal"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="#FFFFFF"/>
 
     <ListView
         android:layout_width="match_parent"

@@ -58,7 +58,7 @@ public class MainActivity extends ActionBarActivity {
         if(fm.getBackStackEntryCount() != 1) {
             fm.popBackStack();
         } else {
-            Toast.makeText(this, "Bye!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.bye), Toast.LENGTH_SHORT).show();
             super.onBackPressed();
         }
     }
