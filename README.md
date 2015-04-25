@@ -20,7 +20,7 @@ An app to help the user find, identify, and classify colors.
   </tr>
   <tr>
     <td></td>
-    <td><p>Identify colors in a picture</p> <p>taken by the phone camera</p></td>
+    <td>Identify colors in a photo</td>
   </tr>
 </table>
 
