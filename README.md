@@ -1,7 +1,7 @@
 # ColorSelector
 An app to help the user find, identify, and classify colors.
 
-<img style="width: 200px;" right" src="https://raw.githubusercontent.com/dhua20/ColorSelector/master/screenshots/Screenshot_2015-04-25-01-13-37.png"/>
+<img style="width: 20px;" right" src="https://raw.githubusercontent.com/dhua20/ColorSelector/master/screenshots/Screenshot_2015-04-25-01-13-37.png"/>
 
 ![alt tag](https://raw.githubusercontent.com/dhua20/ColorSelector/master/screenshots/Screenshot_2015-04-25-01-13-37.png)
 ![alt tag](https://raw.githubusercontent.com/dhua20/ColorSelector/master/screenshots/Screenshot_2015-04-25-01-14-16.png)
